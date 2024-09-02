@@ -1,26 +1,27 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import Colors from "@/constants/Colors";
+import {
+  useSignUp,
+  isClerkAPIResponseError,
+  useSignIn,
+} from "@clerk/clerk-expo";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import Colors from "@/constants/Colors";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import {
   CodeField,
   Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
-import {
-  isClerkAPIResponseError,
-  useSignIn,
-  useSignUp,
-} from "@clerk/clerk-expo";
-
 const CELL_COUNT = 6;
+
 const Page = () => {
   const { phone, signin } = useLocalSearchParams<{
     phone: string;
     signin: string;
   }>();
   const [code, setCode] = useState("");
+
   const ref = useBlurOnFulfill({ value: code, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value: code,
@@ -28,10 +29,14 @@ const Page = () => {
   });
   const { signUp, setActive } = useSignUp();
   const { signIn } = useSignIn();
+
   useEffect(() => {
     if (code.length === 6) {
+      console.log("verify", code);
+
       if (signin === "true") {
-        verifySignIn();
+        console.log("signin");
+        veryifySignIn();
       } else {
         verifyCode();
       }
@@ -53,7 +58,7 @@ const Page = () => {
     }
   };
 
-  const verifySignIn = async () => {
+  const veryifySignIn = async () => {
     try {
       await signIn!.attemptFirstFactor({
         strategy: "phone_code",
@@ -69,7 +74,38 @@ const Page = () => {
     }
   };
 
-  const resendCode = async () => {};
+  const resendCode = async () => {
+    try {
+      if (signin === "true") {
+        const { supportedFirstFactors } = await signIn!.create({
+          identifier: phone,
+        });
+
+        const firstPhoneFactor: any = supportedFirstFactors.find(
+          (factor: any) => {
+            return factor.strategy === "phone_code";
+          }
+        );
+
+        const { phoneNumberId } = firstPhoneFactor;
+
+        await signIn!.prepareFirstFactor({
+          strategy: "phone_code",
+          phoneNumberId,
+        });
+      } else {
+        await signUp!.create({
+          phoneNumber: phone,
+        });
+        signUp!.preparePhoneNumberVerification();
+      }
+    } catch (err) {
+      console.log("error", JSON.stringify(err, null, 2));
+      if (isClerkAPIResponseError(err)) {
+        Alert.alert("Error", err.errors[0].message);
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -92,14 +128,15 @@ const Page = () => {
         keyboardType="number-pad"
         textContentType="oneTimeCode"
         renderCell={({ index, symbol, isFocused }) => (
-          <Text
+          <View
+            // Make sure that you pass onLayout={getCellOnLayoutHandler(index)} prop to root component of "Cell"
+            onLayout={getCellOnLayoutHandler(index)}
             key={index}
-            style={[styles.cellRoot, isFocused && styles.focusCell]}
-            onLayout={getCellOnLayoutHandler(index)}>
+            style={[styles.cellRoot, isFocused && styles.focusCell]}>
             <Text style={styles.cellText}>
               {symbol || (isFocused ? <Cursor /> : null)}
             </Text>
-          </Text>
+          </View>
         )}
       />
 
@@ -111,6 +148,7 @@ const Page = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

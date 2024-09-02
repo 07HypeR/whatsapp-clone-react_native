@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 
-const Page = () => {
+const community = () => {
   return (
     <View>
-      <Text>chats</Text>
+      <Text>community</Text>
     </View>
   );
 };
 
-export default Page;
+export default community;

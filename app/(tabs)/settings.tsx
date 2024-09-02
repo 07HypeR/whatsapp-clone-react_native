@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 
-const Page = () => {
+const settings = () => {
   return (
     <View>
-      <Text>chats</Text>
+      <Text>settings</Text>
     </View>
   );
 };
 
-export default Page;
+export default settings;

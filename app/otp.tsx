@@ -28,9 +28,9 @@ const GER_PHONE = [
   /\d/,
   /\d/,
   /\d/,
-  /\d/,
-  /\d/,
   " ",
+  /\d/,
+  /\d/,
   /\d/,
   /\d/,
   /\d/,
@@ -122,7 +122,7 @@ const Page = () => {
 
         <View style={styles.list}>
           <View style={styles.listItem}>
-            <Text style={styles.listItemText}>India</Text>
+            <Text style={styles.listItemText}>Germany</Text>
             <Ionicons name="chevron-forward" size={20} color={Colors.gray} />
           </View>
           <View style={styles.separator} />
@@ -131,7 +131,7 @@ const Page = () => {
             value={phoneNumber}
             keyboardType="numeric"
             autoFocus
-            placeholder="+91 your phone number"
+            placeholder="+12 your phone number"
             onChangeText={(masked, unmasked) => {
               setPhoneNumber(masked);
             }}

@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 
-const Page = () => {
+const calls = () => {
   return (
     <View>
-      <Text>chats</Text>
+      <Text>calls</Text>
     </View>
   );
 };
 
-export default Page;
+export default calls;
