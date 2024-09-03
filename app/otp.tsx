@@ -84,23 +84,23 @@ const Page = () => {
   const trySignIn = async () => {
     console.log("trySignIn", phoneNumber);
 
-    const { supportedFirstFactors } = await signIn!.create({
-      identifier: phoneNumber,
-    });
+    //   const { supportedFirstFactors } = await signIn!.create({
+    //     identifier: phoneNumber,
+    //   });
 
-    const firstPhoneFactor: any = supportedFirstFactors.find((factor: any) => {
-      return factor.strategy === "phone_code";
-    });
+    //   const firstPhoneFactor: any = supportedFirstFactors.find((factor: any) => {
+    //     return factor.strategy === "phone_code";
+    //   });
 
-    const { phoneNumberId } = firstPhoneFactor;
+    //   const { phoneNumberId } = firstPhoneFactor;
 
-    await signIn!.prepareFirstFactor({
-      strategy: "phone_code",
-      phoneNumberId,
-    });
+    //   await signIn!.prepareFirstFactor({
+    //     strategy: "phone_code",
+    //     phoneNumberId,
+    //   });
 
-    router.push(`/verify/${phoneNumber}?signin=true`);
-    setLoading(false);
+    //   router.push(`/verify/${phoneNumber}?signin=true`);
+    //   setLoading(false);
   };
 
   return (
