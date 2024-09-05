@@ -61,11 +61,11 @@ const _layout = () => {
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="chatbubbles" size={size} color={color} />
           ),
-          // headerShown: false,
-          // tabBarStyle: {
-          //   backgroundColor: Colors.background,
-          //   display: segments[2] === "[id]" ? "none" : "flex",
-          // },
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: Colors.background,
+            display: segments[2] === "[id]" ? "none" : "flex",
+          },
         }}
       />
 
